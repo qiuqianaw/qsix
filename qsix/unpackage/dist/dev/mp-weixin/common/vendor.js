@@ -8790,7 +8790,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 { id: 3, name: "包玲玲", money: 3 },
 { id: 4, name: "刘树坤", money: 3 },
 { id: 5, name: "陶玲", money: 2 },
-{ id: 6, name: "余小梅", money: 0 },
+{ id: 6, name: "余小梅", money: 4 },
 { id: 7, name: "凌光群", money: 2 },
 { id: 8, name: "晁增芳", money: 2 },
 { id: 9, name: "李强", money: 4 },

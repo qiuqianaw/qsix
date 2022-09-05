@@ -8784,7 +8784,7 @@ function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var data = [
+Object.defineProperty(exports, "__esModule", { value: true });exports.getOldVal = exports.updateData = exports.data = void 0;var data = [
 { id: 1, name: "黄学芳", money: 5 },
 { id: 2, name: "陈艳林", money: 6 },
 { id: 3, name: "包玲玲", money: 3 },
@@ -9052,10 +9052,24 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 { id: 265, name: "李长英", money: 2 },
 { id: 266, name: "廖应琼", money: 2 },
 { id: 267, name: "张德芳", money: 2 },
-{ id: 268, name: "刘德珍", money: 2 }];var _default =
+{ id: 268, name: "刘德珍", money: 2 }];exports.data = data;
 
 
-data;exports.default = _default;
+var updates = [];
+var oldVal = {};
+
+var updateData = function updateData(newVal) {
+  // 记录旧数据
+  // 更新新数据
+  var xxx = { oldVal: oldVal, newVal: newVal };
+  updates.push(xxx);
+  console.log(updates);
+};exports.updateData = updateData;
+
+var getOldVal = function getOldVal(param) {
+  oldVal = param;
+  // param 原数据
+};exports.getOldVal = getOldVal;
 
 /***/ })
 ]]);

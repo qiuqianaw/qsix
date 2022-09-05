@@ -103,15 +103,6 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  if (!_vm._isMounted) {
-    _vm.e0 = function($event) {
-      _vm.modalName = ""
-    }
-
-    _vm.e1 = function($event) {
-      _vm.modalName = ""
-    }
-  }
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -212,10 +203,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
-
-
-
-var _data = _interopRequireDefault(__webpack_require__(/*! ../../server/api/data */ 18));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+var _data = __webpack_require__(/*! ../../server/api/data */ 18); //
 //
 //
 //
@@ -283,15 +271,24 @@ var _data = _interopRequireDefault(__webpack_require__(/*! ../../server/api/data
 //
 //
 //
-//
-//
-//
-var _default = { data: function data() {return { list: [], searchValue: "", order: ["原始排序", "姓名排序", "金额排序"], orderNum: 0, modalName: "", modalSelect: {} };}, watch: { searchValue: function searchValue(val, oldVal) {if (val.length === 0) {var _this = this;this.$nextTick(function () {_this.loadData();});console.log(this.list);}this.list = this.fuzzyQuery(this.list, val);} }, onLoad: function onLoad() {this.loadData();}, onReady: function onReady() {}, methods: { showModal: function showModal(index) {this.modalName = "Modal";this.modalSelect = this.list.filter(function (item) {return item.id === index;})[0];console.log(this.modalSelect);}, orderBtn: function orderBtn() {console.log(this.orderNum);this.searchValue = "";this.orderNum = (this.orderNum + 1) % 3;var num = this.orderNum;if (num === 0) {this.list = this.initData;} else if (num === 1) {this.list.sort(function (a, b) {return a.name.localeCompare(b.name, "zh-Hans-CN", { sensitivity: "accent" });});} else {this.list.sort(function (a, b) {return b.money - a.money;});}}, loadData: function loadData() {this.list = _data.default;}, /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * 使用test方法实现模糊查询
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * @param  {Array}  list     原数组
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * @param  {String} keyWord  查询的关键词
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           * @return {Array}           查询的结果
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           */fuzzyQuery: function fuzzyQuery(_list, keyWord) {var arr = [];for (var i = 0; i < _list.length; i++) {if (_list[i].name.indexOf(keyWord) >= 0) {arr.push(_list[i]);}}return arr;} } };exports.default = _default;
+var _default = { data: function data() {return { list: [], searchValue: "", order: ["原始排序", "姓名排序", "金额排序"], orderNum: 0, modalName: "", row: { id: null, name: null, money: null }, initData: [], btnShow: true };}, watch: { searchValue: function searchValue(val) {if (val.length === 0) {this.btnShow = true;var _this = this;this.$nextTick(function () {_this.loadData();});} else {this.btnShow = false;}this.list = this.fuzzyQuery(this.list, val);} }, onLoad: function onLoad() {this.loadData();}, onReady: function onReady() {}, methods: { // updateRow() {
+    //   updateData(this.row);
+    // },
+    // showModal(index) {
+    //   this.modalName = "Modal";
+    //   this.row = this.list.filter((item) => item.id === index)[0];
+    //   getOldVal(this.row);
+    // },
+    // cancelModal() {
+    //   this.modalName = "";
+    //   this.row = { id: null, name: null, money: null };
+    // },
+    orderBtn: function orderBtn() {this.searchValue = "";this.orderNum = (this.orderNum + 1) % 3;var num = this.orderNum;if (num === 0) {console.log("原始排序");this.list.sort(function (a, b) {return a.id - b.id;});} else if (num === 1) {this.list.sort(function (a, b) {return a.name.localeCompare(b.name, "zh-Hans-CN", { sensitivity: "accent" });});} else {this.list.sort(function (a, b) {return b.money - a.money;});}}, loadData: function loadData() {this.list = _data.data;this.initData = _data.data;}, /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * 使用test方法实现模糊查询
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @param  {Array}  list     原数组
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @param  {String} keyWord  查询的关键词
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @return {Array}           查询的结果
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */fuzzyQuery: function fuzzyQuery(_list, keyWord) {var arr = [];for (var i = 0; i < _list.length; i++) {if (_list[i].name.indexOf(keyWord) >= 0) {arr.push(_list[i]);}}return arr;} } };exports.default = _default;
 
 /***/ })
 ],[[12,"common/runtime","common/vendor"]]]);

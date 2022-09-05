@@ -10,7 +10,7 @@
           v-model="searchValue"
         />
       </view>
-      <view class="action">
+      <view class="action" v-if="btnShow">
         <button class="cu-btn text-grey" @click="orderBtn()">
           <text class="cuIcon-order" />{{ order[orderNum] }}
         </button>
@@ -18,12 +18,7 @@
     </view>
 
     <view class="cu-list menu-avatar">
-      <view
-        class="cu-item"
-        v-for="(item, index) in list"
-        :key="index"
-        @click="showModal(item.id)"
-      >
+      <view class="cu-item" v-for="(item, index) in list" :key="index">
         <view class="cu-avatar round lg">{{ item.name[0] }}</view>
         <view class="content">
           <view class="text-grey">{{ item.name }} </view>
@@ -32,7 +27,7 @@
             v-if="item.name[item.name.length - 1] === '?'"
           >
             <text class="cuIcon-infofill text-red margin-right-xs"></text>
-            (数据错误，请手动修改）</view
+            (数据有误，请手动修改）</view
           >
         </view>
         <view class="action">
@@ -45,32 +40,34 @@
     </view>
 
     <!-- Modal框 -->
-    <view class="cu-modal" :class="modalName == 'Modal' ? 'show' : ''">
+    <!-- <view class="cu-modal" :class="modalName == 'Modal' ? 'show' : ''">
       <view class="cu-dialog">
         <view class="cu-bar bg-white">
-          <view class="action text-gray" @tap="modalName = ''">取消</view>
-          <view class="action text-grey" @tap="modalName = ''">确定</view>
+          <view class="action text-gray" @tap="cancelModal()">取消</view>
+          <view class="action text-grey" @tap="updateRow()">确定</view>
         </view>
         <view>
           <form class="text-left text-grey">
             <view class="cu-form-group">
               <view class="title">姓名</view>
-              <input name="input" />{{ modalSelect.name }}<input />
+              <input name="input" v-model="row.name" />
             </view>
             <view class="cu-form-group">
               <view class="title">金额</view>
-              <input name="input" />{{ modalSelect.money }}00
-              <input />
+              <input name="input" v-model="row.money" />
+              <view class="cu-capsule radius">
+                <view class="cu-tag">00 元</view>
+              </view>
             </view>
           </form>
         </view>
       </view>
-    </view>
+    </view> -->
   </view>
 </template>
  
 <script>
-import data from "../../server/api/data";
+import { data } from "../../server/api/data";
 export default {
   data() {
     return {
@@ -79,17 +76,21 @@ export default {
       order: ["原始排序", "姓名排序", "金额排序"],
       orderNum: 0,
       modalName: "",
-      modalSelect: {},
+      row: { id: null, name: null, money: null },
+      initData: [],
+      btnShow: true,
     };
   },
   watch: {
-    searchValue(val, oldVal) {
+    searchValue(val) {
       if (val.length === 0) {
+        this.btnShow = true;
         const _this = this;
         this.$nextTick(() => {
           _this.loadData();
         });
-        console.log(this.list);
+      } else {
+        this.btnShow = false;
       }
       this.list = this.fuzzyQuery(this.list, val);
     },
@@ -99,18 +100,27 @@ export default {
   },
   onReady() {},
   methods: {
-    showModal(index) {
-      this.modalName = "Modal";
-      this.modalSelect = this.list.filter((item) => item.id === index)[0];
-      console.log(this.modalSelect);
-    },
+    // updateRow() {
+    //   updateData(this.row);
+    // },
+    // showModal(index) {
+    //   this.modalName = "Modal";
+    //   this.row = this.list.filter((item) => item.id === index)[0];
+    //   getOldVal(this.row);
+    // },
+    // cancelModal() {
+    //   this.modalName = "";
+    //   this.row = { id: null, name: null, money: null };
+    // },
     orderBtn() {
-      console.log(this.orderNum);
       this.searchValue = "";
       this.orderNum = (this.orderNum + 1) % 3;
       const num = this.orderNum;
       if (num === 0) {
-        this.list = this.initData;
+        console.log("原始排序");
+        this.list.sort((a, b) => {
+          return a.id - b.id;
+        });
       } else if (num === 1) {
         this.list.sort((a, b) => {
           return a.name.localeCompare(b.name, "zh-Hans-CN", {
@@ -125,6 +135,7 @@ export default {
     },
     loadData() {
       this.list = data;
+      this.initData = data;
     },
     /**
      * 使用test方法实现模糊查询
